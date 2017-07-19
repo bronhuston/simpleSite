@@ -44,7 +44,7 @@ func (svc SaveToFileService) getUser(username string) (*User, error) {
 		return nil, err
 	}
 
-	return &User{username, u.Name, u.Age, u.Description, u.Id}, nil
+	return u, nil
 }
 
 func (svc SaveToDBService) save(u *User) error {

@@ -5,6 +5,8 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
+	"github.com/pressly/goose"
+	"log"
 	"net/http"
 )
 
@@ -12,9 +14,16 @@ func main() {
 	db := sqlx.MustConnect("mysql", "root:password@tcp(127.0.0.1:3306)/simplesite")
 	defer db.Close()
 
-	r := mux.NewRouter()
+	err := goose.SetDialect("mysql")
+	if err != nil {
+		log.Fatal("Unable to set goose dialect: ", err)
+	}
+	err = goose.Up(db.DB, "./db")
+	if err != nil {
+		log.Fatal("Goose migrations failed: ", err)
+	}
 
-	//db.MustExec("create table users ( id int unsigned not null auto_increment, primary key (id), username varchar(50) not null, age int, description varchar(250), name varchar(100) );")
+	r := mux.NewRouter()
 
 	//svc := simpleSite.SaveToFileService{}
 	repository := &simpleSite.Repository{Db: db}
