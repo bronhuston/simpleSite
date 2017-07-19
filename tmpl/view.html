@@ -1,0 +1,13 @@
+<h1>{{.Username}}</h1>
+
+<p>[<a href="/edit/{{.Username}}">Edit User's Name and Age</a>]</p>
+<p>[<a href="/json/{{.Username}}">User Info As JSON</a>]</p>
+
+<div>
+    <h4>User Info</h4>
+    <li>Id: {{.Id}}</li>
+    <li>Username: {{.Username}}</li>
+    <li>Name: {{.Name}}</li>
+    <li>Age: {{.Age}}</li>
+    <li>Description: {{printf "%s" .Description}}</li>
+</div>
