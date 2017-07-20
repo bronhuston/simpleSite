@@ -25,9 +25,8 @@ func main() {
 
 	r := mux.NewRouter()
 
-	//svc := simpleSite.SaveToFileService{}
 	repository := &simpleSite.Repository{Db: db}
-	svc := simpleSite.SaveToDBService{Repository: repository}
+	svc := &simpleSite.SaveToDBService{Repository: repository}
 
 	r.HandleFunc("/view/{username}", simpleSite.ViewHandler(svc))
 	r.HandleFunc("/edit/{username}", simpleSite.EditHandler(svc))

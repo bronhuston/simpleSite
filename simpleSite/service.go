@@ -1,14 +1,5 @@
 package simpleSite
 
-import (
-	"encoding/json"
-	"errors"
-	"io/ioutil"
-)
-
-type SaveToFileService struct {
-}
-
 type SaveToDBService struct {
 	Repository *Repository
 }
@@ -18,36 +9,7 @@ type Service interface {
 	getUser(string) (*User, error)
 }
 
-func (svc SaveToFileService) save(u *User) error {
-	filename := u.Username + ".txt"
-	marshaledUser, err := json.Marshal(&u)
-
-	if err != nil {
-		errors.New("Error marshalling the user information")
-	}
-
-	return ioutil.WriteFile("data/"+filename, marshaledUser, 0600)
-}
-
-func (svc SaveToFileService) getUser(username string) (*User, error) {
-	filename := username + ".txt"
-	userAsJson, err := ioutil.ReadFile("data/" + filename)
-
-	if err != nil {
-		return nil, err
-	}
-
-	var u *User
-	err = json.Unmarshal(userAsJson, &u)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return u, nil
-}
-
-func (svc SaveToDBService) save(u *User) error {
+func (svc *SaveToDBService) save(u *User) error {
 	user, _ := svc.Repository.findUserByUsername(u.Username)
 
 	if user.Id == 0 {
@@ -61,6 +23,6 @@ func (svc SaveToDBService) save(u *User) error {
 	}
 }
 
-func (svc SaveToDBService) getUser(username string) (*User, error) {
+func (svc *SaveToDBService) getUser(username string) (*User, error) {
 	return svc.Repository.findUserByUsername(username)
 }
