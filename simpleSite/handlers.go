@@ -8,11 +8,11 @@ import (
 	"html/template"
 )
 
-func ViewHandler(svc Service) http.HandlerFunc {
+func ViewHandler(svc *ServiceImpl) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
-		user, err := svc.getUser(username)
+		user, err := svc.GetUser(username)
 
 		if err != nil {
 			http.Redirect(w, r, "/edit/"+username, http.StatusFound)
@@ -33,11 +33,11 @@ func renderTemplate(w http.ResponseWriter, tmpl string, user *User) {
 	}
 }
 
-func EditHandler(svc Service) http.HandlerFunc {
+func EditHandler(svc *ServiceImpl) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
-		user, err := svc.getUser(username)
+		user, err := svc.GetUser(username)
 
 		if err != nil {
 			user = &User{Username: username}
@@ -58,11 +58,11 @@ func HomePageHandler() http.HandlerFunc {
 	}
 }
 
-func JsonHandler(svc Service) http.HandlerFunc {
+func JsonHandler(svc *ServiceImpl) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
-		user, err := svc.getUser(username)
+		user, err := svc.GetUser(username)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -73,7 +73,7 @@ func JsonHandler(svc Service) http.HandlerFunc {
 	}
 }
 
-func SaveHandler(svc Service) http.HandlerFunc {
+func SaveHandler(svc *ServiceImpl) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		username := vars["username"]
@@ -88,7 +88,7 @@ func SaveHandler(svc Service) http.HandlerFunc {
 
 		user := &User{Username: username, Name: name, Age: age, Description: []byte(description)}
 
-		err = svc.save(user)
+		err = svc.Save(user)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)

@@ -1,28 +1,28 @@
 package simpleSite
 
-type SaveToDBService struct {
-	Repository *Repository
+type ServiceImpl struct {
+	Repository Repository
 }
 
 type Service interface {
-	save(*User) error
-	getUser(string) (*User, error)
+	Save(*User) error
+	GetUser(string) (*User, error)
 }
 
-func (svc *SaveToDBService) save(u *User) error {
-	user, _ := svc.Repository.findUserByUsername(u.Username)
+func (svc *ServiceImpl) Save(u *User) error {
+	user, _ := svc.Repository.FindUserByUsername(u.Username)
 
 	if user.Id == 0 {
-		id, err := svc.Repository.createUser(u)
+		id, err := svc.Repository.CreateUser(u)
 		u.Id = id
 		return err
 	} else {
 		u.Id = user.Id
-		err := svc.Repository.updateUser(u)
+		err := svc.Repository.UpdateUser(u)
 		return err
 	}
 }
 
-func (svc *SaveToDBService) getUser(username string) (*User, error) {
-	return svc.Repository.findUserByUsername(username)
+func (svc *ServiceImpl) GetUser(username string) (*User, error) {
+	return svc.Repository.FindUserByUsername(username)
 }
