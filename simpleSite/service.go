@@ -24,5 +24,17 @@ func (svc *ServiceImpl) Save(u *User) error {
 }
 
 func (svc *ServiceImpl) GetUser(username string) (*User, error) {
-	return svc.Repository.FindUserByUsername(username)
+	user, err := svc.Repository.FindUserByUsername(username)
+	if err != nil {
+		return &User{}, err
+	}
+
+	addresses, err := svc.Repository.GetAddressesByUserName(user.Username)
+	if err != nil {
+		return user, err
+	}
+
+	user.Addresses = *addresses
+
+	return user, nil
 }

@@ -10,6 +10,7 @@ type Repository interface {
 	CreateUser(u *User) (int, error)
 	UpdateUser(u *User) error
 	FindUserByUsername(s string) (*User, error)
+	GetAddressesByUserName(s string) (*[]Address, error)
 }
 
 type RepositoryImpl struct {
@@ -43,7 +44,7 @@ func (r *RepositoryImpl) UpdateUser(u *User) error {
 func (r *RepositoryImpl) FindUserByUsername(username string) (*User, error) {
 	u := User{}
 
-	err := r.Db.Get(&u, "select * from users where username=?", username)
+	err := r.Db.Get(&u, "select u.* from users u where username=?", username)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			log.Println(err)
@@ -52,4 +53,15 @@ func (r *RepositoryImpl) FindUserByUsername(username string) (*User, error) {
 	}
 
 	return &u, nil
+}
+
+func (r *RepositoryImpl) GetAddressesByUserName(username string) (*[]Address, error) {
+	a := []Address{}
+	err := r.Db.Select(&a, "select a.* from users u inner join addresses a on a.user_id = u.id where u.username = ?", username)
+	if err != nil {
+		log.Println(err)
+		return &[]Address{}, err
+	}
+
+	return &a, nil
 }
