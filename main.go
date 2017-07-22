@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	db := sqlx.MustConnect("mysql", "root:password@tcp(127.0.0.1:3306)/simplesite")
+	db := sqlx.MustConnect("mysql", "root:password@tcp(127.0.0.1:3306)/simplesite?parseTime=true")
 	defer db.Close()
 
 	err := goose.SetDialect("mysql")

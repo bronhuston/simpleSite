@@ -1,5 +1,7 @@
 package simpleSite
 
+import "time"
+
 type ServiceImpl struct {
 	Repository Repository
 }
@@ -13,6 +15,7 @@ func (svc *ServiceImpl) Save(u *User) error {
 	user, _ := svc.Repository.FindUserByUsername(u.Username)
 
 	if user.Id == 0 {
+		u.CreatedAt = time.Now()
 		id, err := svc.Repository.CreateUser(u)
 		u.Id = id
 		return err

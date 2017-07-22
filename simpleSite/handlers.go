@@ -3,9 +3,9 @@ package simpleSite
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"html/template"
 	"net/http"
 	"strconv"
-	"html/template"
 )
 
 func ViewHandler(svc *ServiceImpl) http.HandlerFunc {

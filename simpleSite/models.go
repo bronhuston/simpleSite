@@ -1,6 +1,9 @@
 package simpleSite
 
-import "database/sql"
+import (
+	"database/sql"
+	"time"
+)
 
 type User struct {
 	Username    string
@@ -9,6 +12,16 @@ type User struct {
 	Description []byte
 	Id          int
 	Addresses   []Address
+	CreatedTimestamp
+	UpdatedTimestamp
+}
+
+type CreatedTimestamp struct {
+	CreatedAt time.Time `db:"created_at"`
+}
+
+type UpdatedTimestamp struct {
+	UpdatedAt time.Time `db:"updated_at"`
 }
 
 type Address struct {
