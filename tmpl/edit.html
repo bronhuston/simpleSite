@@ -1,0 +1,15 @@
+<h1>Editing {{.Username}}</h1>
+
+<form action="/save/{{.Username}}" method="POST">
+    <div>
+        <label for="name">Name: </label>
+        <input id="name" name="name" type="text" value="{{.Name}}"/>
+        <br>
+        <label for="age">Age: </label>
+        <input id="age" name="age" type="number" value="{{.Age}}"/>
+        <br>
+        <label for="description">Description: </label>
+        <textarea id="description" name="description" rows="5" cols="20" style="vertical-align: middle">{{printf "%s" .Description}}</textarea>
+    </div>
+    <div><input type="submit" value="Save"></div>
+</form>
